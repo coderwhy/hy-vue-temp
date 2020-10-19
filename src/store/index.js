@@ -6,8 +6,9 @@ import * as types from './types';
 Vue.use(Vuex)
 
 // 动态加载modules
+const modules = {}
 const files = require.context('./', true, /index\.js$/);
-const modules = files.keys().filter(key => {
+files.keys().filter(key => {
   if (key === './index.js') return false;
   return true
 }).map(key => {  
@@ -16,9 +17,7 @@ const modules = files.keys().filter(key => {
   const moduleName = modulePath.replace('/index.js', '');
   const module = require(`${key}`);
 
-  return {
-    [moduleName]: module.default
-  }
+  modules[`${moduleName}`] = module.default;
 })
 
 console.log(modules);
